@@ -7,13 +7,15 @@ RUN apt-get update && \
   npm install -g clean-css-cli
 
 RUN cd / && \
-  git clone --depth 1 https://github.com/ntop/nDPI.git && \
+  mkdir nDPI && \
+  git clone --depth 1 https://github.com/ntop/nDPI && \
   cd nDPI && \
   ./autogen.sh && \
   ./configure && \
   make
 RUN cd / && \
-  git clone --depth 1 https://github.com/ntop/ntopng.git && \
+  mkdir ntopng && \
+  git clone --depth 1 https://github.com/ntop/ntopng && \
   cd ntopng && \
   ./autogen.sh && \
   ./configure && \
