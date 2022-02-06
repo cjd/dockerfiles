@@ -12,7 +12,7 @@ FROM nlss/base-alpine:latest
 COPY --from=build /git-ssh-honeypot/bin/ssh-honeypot /bin/ssh-honeypot
 
 RUN apk add --update --no-cache libssh-dev json-c-dev openssh \
-    && adduser --shell /bin/false --disabled-password --gecos "Honeypot" --home "/home/honeypot" "honeypot \
+    && adduser --shell /bin/false --disabled-password --gecos "Honeypot" --home "/home/honeypot" honeypot \
     && mkdir -p /home/honeypot{log,rsa}
 
 COPY ["./rootfs", "/"]
