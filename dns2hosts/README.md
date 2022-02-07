@@ -25,7 +25,7 @@ On the secondary DNS server you also run pihole with this script generating a ho
           TZ: 'Australia/Sydney'
           WEBPASSWORD: 'admin'
           SERVER_IP: '192.168.0.8'
-          VIRTUAL_HOST: home.adebenham.com
+          VIRTUAL_HOST: home.example.com
           WEB_PORT: 2080
           INTERFACE: eno1
         volumes:
