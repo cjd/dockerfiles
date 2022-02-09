@@ -1,8 +1,9 @@
 Quick container to build a hosts file from doing a reverse-dns lookup of a subnet
 
-Takes two environment variables:\
+Takes three environment variables:\
 NET for the first 3 components of the subnet\
 DNS to list your preferred DNS server to query
+LOCALDOMAIN to name your local domain
 
 This is used in conjunction with a dual-pihole setup where your main Pihole runs on one system (serving DHCP and DNS) and gives out a secondary DNS server.\
 On the secondary DNS server you also run pihole with this script generating a hosts file so that it will respond properly for local addresses as well\
@@ -41,5 +42,6 @@ On the secondary DNS server you also run pihole with this script generating a ho
         environment:
           DNS: 192.168.0.9
           NET: 192.168.0
+          LOCALDOMAIN: lan
         volumes:
           - ./dns2hosts/hosts:/hosts
