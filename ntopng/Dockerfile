@@ -22,9 +22,9 @@ RUN cd / && \
   make
 RUN mkdir -p /root/dat_files && \
   cd /root/dat_files && \
-  wget https://download.db-ip.com/free/dbip-city-lite-2022-05.mmdb.gz && \
-  wget https://download.db-ip.com/free/dbip-asn-lite-2022-05.mmdb.gz && \
-  wget https://download.db-ip.com/free/dbip-country-lite-2022-05.mmdb.gz && \
+  wget https://download.db-ip.com/free/dbip-city-lite-2022-08.mmdb.gz && \
+  wget https://download.db-ip.com/free/dbip-asn-lite-2022-08.mmdb.gz && \
+  wget https://download.db-ip.com/free/dbip-country-lite-2022-08.mmdb.gz && \
   gunzip *gz && \
   cd /ntopng/packages/debian && \
   ./configure && \
@@ -39,7 +39,7 @@ RUN apt-get update && \
   apt-get -y -f install && \
   apt-get clean && \
   rm /*.deb
-RUN echo '#!/bin/bash\n/usr/bin/redis-server &\n/usr/bin/ntopng "$@"\n' > /run.sh && \
+RUN echo '#!/bin/bash\ncd /etc/ntopng\n/usr/bin/redis-server &\n/usr/bin/ntopng "$@"\n' > /run.sh && \
     chmod +x /run.sh
 
 EXPOSE 3000
