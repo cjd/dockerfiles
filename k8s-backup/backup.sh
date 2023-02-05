@@ -77,8 +77,8 @@ echo -en "$JOB_YAML_VOL" >> job/backup-job.yml
 echo -en "/${NS}" >> job/backup-job.yml
 echo -en "${VOLUMES}\n" >> job/backup-job.yml
 if [ "${VOLUMES}" == "" ]; then exit;fi
-kubectl delete -f pvc
-kubectl delete -f snap
+kubectl delete -f pvc 2>/dev/null
+kubectl delete -f snap 2>/dev/null
 kubectl apply -f snap
 kubectl apply -f pvc
 kubectl apply -f job
