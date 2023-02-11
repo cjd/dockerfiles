@@ -1,4 +1,9 @@
 FROM alpine:latest
-RUN apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/testing kubectl rsync bash jq
-COPY ./backup.sh /backup.sh
-CMD /backup.sh
+
+RUN apk --no-cache --no-progress add bash openssh rsync zfs nfs-utils
+
+COPY ./mkback.sh /
+COPY ./backup_volumes.sh /
+COPY ./ssh_server.sh /
+
+CMD ["/mkback.sh"]

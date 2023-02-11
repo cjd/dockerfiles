@@ -1,33 +1,32 @@
 #!/bin/sh
+SSH_OPTS='-q -p 12000 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'
 echo "Checking for the existing data"
-mkdir -p /backup
-mount -o nolock 192.168.0.2:/tank/Volumes/$NS /backup
+FORCE=0
 cd /mnt
 for PV in *
-        do if [ -f /backup/${PV}-pvc/.pause ]
+        do if ssh $SSH_OPTS root@jimbob test -f /tank/Volumes/${NS}/${PV}-pvc/.pause
                 then echo Pausing; sleep 1d
         fi
         # Check for node pv was last on
-        if [ -f /backup/${PV}-pvc/.nodeName ]
-                then LASTNODE=`cat /backup/${PV}-pvc/.nodeName`
-                echo Last running on ${LASTNODE} - Now running on ${NODE}
+        LASTNODE=`ssh $SSH_OPTS root@jimbob cat /tank/Volumes/${NS}/${PV}-pvc/.nodeName`
+        if [ -n "$LASTNODE" ]
+                then echo Last running on ${LASTNODE} - Now running on ${NODE}
                 if [ ! -z "$LASTNODE" -a "$LASTNODE" != "$NODE" ]
                         then echo Syncing ${PV} from ${LASTNODE}
-                        mkdir /oldk8s
-                        mount -o nolock $LASTNODE:/k8s /oldk8s
-                        if mountpoint -q /oldk8s
-                          then rsync -av --delete-during /oldk8s/${NS}/${PV}-pvc/ /mnt/${PV}/
-                          umount /oldk8s
-                        else touch /backuo/${PV}-pvc/.force_restore
+                        if ping -c 1 ${LASTNODE}
+                            then rsync -av -e "ssh $SSH_OPTS" --delete-during root@${LASTNODE}:/k8s/${NS}/${PV}-pvc/ /mnt/${PV}/
+                            else FORCE=1
                         fi
                 fi
         else echo No previous nodeName found
         fi
-        if [ -f /backup/${PV}-pvc/.force_restore ]
-                then rm  /backup/${PV}-pvc/.force_restore 2>/dev/null
-                echo Restoring ${PV} from backup
-                rsync -av --delete-during /backup/${PV}-pvc/ /mnt/${PV}/
+        if ssh $SSH_OPTS root@jimbob test -f /tank/Volumes/${NS}/${PV}-pvc/.force_restore
+        then FORCE=1
         fi
-        echo -e $NODE > /backup/${PV}-pvc/.nodeName
+        if [ $FORCE -eq 1 ]
+                then echo Restoring ${PV} from backup
+                rsync -av  -e "ssh $SSH_OPTS" --delete-during root@jimbob:/tank/Volumes/${NS}/${PV}-pvc/ /mnt/${PV}/
+        fi
+        ssh $SSH_OPTS root@jimbob "echo -e $NODE > /tank/Volumes/${NS}/${PV}-pvc/.nodeName"
 done
 echo "  >> Data loaded"
