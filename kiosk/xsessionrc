@@ -1,0 +1,8 @@
+openbox &
+xset s noblank
+xset s off
+xset -dpms
+unclutter -idle 0.5 -root &
+xrandr --output `xrandr -q|grep " connec"| cut -f1 -d" "` --rotate inverted
+x11vnc -display :0 -loop &
+chromium --no-sandbox --noerrdialogs --disable-infobars --kiosk $URL
