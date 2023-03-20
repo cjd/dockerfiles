@@ -1,4 +1,5 @@
 FROM debian:bullseye as builder
+LABEL org.opencontainers.image.source https://github.com/cjd/dockerfiles
 
 RUN apt-get update && \
     apt-get -y -q install build-essential git bison flex libxml2-dev libpcap-dev libtool libtool-bin rrdtool librrd-dev autoconf pkg-config automake autogen redis-server wget libsqlite3-dev libhiredis-dev libmaxminddb-dev libcurl4-openssl-dev libpango1.0-dev libcairo2-dev libnetfilter-queue-dev zlib1g-dev libssl-dev libcap-dev libnetfilter-conntrack-dev libreadline-dev libjson-c-dev libldap2-dev rename libsnmp-dev libexpat1-dev npm libpng-dev libzmq5-dev default-libmysqlclient-dev sudo debhelper checkinstall lsb-release && \
@@ -22,9 +23,9 @@ RUN cd / && \
   make
 RUN mkdir -p /root/dat_files && \
   cd /root/dat_files && \
-  wget https://download.db-ip.com/free/dbip-city-lite-2022-08.mmdb.gz && \
-  wget https://download.db-ip.com/free/dbip-asn-lite-2022-08.mmdb.gz && \
-  wget https://download.db-ip.com/free/dbip-country-lite-2022-08.mmdb.gz && \
+  wget https://download.db-ip.com/free/dbip-city-lite-2023-03.mmdb.gz && \
+  wget https://download.db-ip.com/free/dbip-asn-lite-2023-03.mmdb.gz && \
+  wget https://download.db-ip.com/free/dbip-country-lite-2023-03.mmdb.gz && \
   gunzip *gz && \
   cd /ntopng/packages/debian && \
   ./configure && \
