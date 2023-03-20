@@ -1,4 +1,5 @@
 FROM alpine:latest AS build
+LABEL org.opencontainers.image.source https://github.com/cjd/dockerfiles
 
 RUN apk add --update alpine-sdk clang git libssh-dev openssl openssh json-c-dev libssh2-dev libpcap-dev \
     && git clone --depth=1 --single-branch -j "$(nproc)" https://github.com/droberson/ssh-honeypot.git /git-ssh-honeypot \
