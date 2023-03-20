@@ -11,7 +11,7 @@ if [ "$1" = "-b" ]
   shift
 fi
 
-VOLROOT=/tank/Volumes
+VOLROOT=/k8s
 cd ${VOLROOT}
 for VOL in */*
   do if [ ! -z "$1" -a "$1" != "$VOL" ];then continue; fi
@@ -23,10 +23,11 @@ for VOL in */*
   mkdir -p ${VOLROOT}/${VOL}/
   rsync -av -e "ssh ${SSH_OPTS}" --delete-after ${PROGRESS} --exclude '.nodeName' --exclude '.pause' root@${NODE}:/k8s/${VOL}/ ${VOLROOT}/${VOL}/
   if [ "$SKIP_SEND" = "true" ]; then continue; fi
-  for DSTNODE in jimbob fanless elite
+  for DSTNODE in fanless elite
     do if [ "${DSTNODE}" != "${NODE}" ]
       then echo Sending ${VOL} to ${DSTNODE}
         rsync -av -e "ssh ${SSH_OPTS}" --delete-after ${PROGRESS} ${VOLROOT}/${VOL}/ root@${DSTNODE}:/k8s/${VOL}/
     fi
   done
+  rsync -av -e "ssh ${SSH_OPTS}" --delete-after ${PROGRESS} ${VOLROOT}/${VOL}/ root@jimbob:/tank/Volumes/${VOL}/
 done
