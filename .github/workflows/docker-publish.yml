@@ -16,7 +16,7 @@ on:
   #   branches: [ "main" ]
 
 env:
-  DOCKERHUB_NAMESPACE: ${{ github.repository_owner }}
+  DOCKERHUB_NAMESPACE: debenham
 
 jobs:
   build:
