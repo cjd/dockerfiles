@@ -9,7 +9,7 @@ on:
   #schedule:
   #  - cron: '32 3 1 * *'
   push:
-    branches: [ "main", "build-docker-in-actions" ]
+    branches: [ "main" ]
     # Publish semver tags as releases.
     # tags: [ 'v*.*.*' ]
   # pull_request:
@@ -26,27 +26,27 @@ jobs:
         image:
           - dhcp-helper
           - dns2hosts
-          # - dnsmasq
-          # - dock2dns
-          # - dosage
-          # - godaddy
-          # - honeypot
-          # - k8s-backup
-          # - k8s-restore
-          # - kiosk
-          # - miiocli
-          # - nginx
-          # - ntopng
-          # - ntpd
-          # - nvim
-          # - php
-          # - rsync
-          # - rtl_433_discovery
-          # - socat
-          # - spice-client
-          # - sslh
-          # - tftpd
-          # - vdoninja
+          - dnsmasq
+          - dock2dns
+          - dosage
+          - godaddy
+          - honeypot
+          - k8s-backup
+          - k8s-restore
+          - kiosk
+          - miiocli
+          - nginx
+          - ntopng
+          - ntpd
+          - nvim
+          - php
+          - rsync
+          - rtl_433_discovery
+          - socat
+          - spice-client
+          - sslh
+          - tftpd
+          - vdoninja
       
     runs-on: ubuntu-latest
     permissions:
