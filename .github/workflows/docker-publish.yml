@@ -24,8 +24,29 @@ jobs:
     strategy:
       matrix:
         image:
-          - dosage
-          - rsync
+          - dhcp-helper
+          - dns2hosts
+          # - dnsmasq
+          # - dock2dns
+          # - dosage
+          # - godaddy
+          # - honeypot
+          # - k8s-backup
+          # - k8s-restore
+          # - kiosk
+          # - miiocli
+          # - nginx
+          # - ntopng
+          # - ntpd
+          # - nvim
+          # - php
+          # - rsync
+          # - rtl_433_discovery
+          # - socat
+          # - spice-client
+          # - sslh
+          # - tftpd
+          # - vdoninja
       
     runs-on: ubuntu-latest
     permissions:
@@ -69,12 +90,21 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Set documentation URL property
+        run: |
+          [ -r "${{ matrix.image}}/README.md" ] && README_PREFIX="${{ matrix.image }}/"
+          echo "README_PATH=${README_PREFIX}README.md" >> "$GITHUB_ENV"
+
       # Extract metadata (tags, labels) for Docker
       # https://github.com/docker/metadata-action
       - name: Extract Docker metadata
         id: meta
         uses: docker/metadata-action@v4.6.0
         with:
+          labels: |
+            org.opencontainers.image.title=${{ matrix.image }} image by github.com/${{ github.repository_owner }}
+            org.opencontainers.image.source=https://github.com/${{ github.repository }}/${{ matrix.image }}
+            org.opencontainers.image.documentation=https://github.com/${{ github.repository }}/${{ env.README_PATH }}
           images: |
             ${{ env.DOCKERHUB_NAMESPACE }}/${{ matrix.image }}
             ghcr.io/${{ github.repository_owner }}/${{ matrix.image }}
