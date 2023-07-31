@@ -1,1 +1,2 @@
-nvim/root/.cache/nvim/luac
+nvim/root/.cache
+nvim/root/.local/state
