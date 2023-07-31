@@ -23,9 +23,9 @@ RUN cd / && \
   make
 RUN mkdir -p /root/dat_files && \
   cd /root/dat_files && \
-  wget https://download.db-ip.com/free/dbip-city-lite-2023-03.mmdb.gz && \
-  wget https://download.db-ip.com/free/dbip-asn-lite-2023-03.mmdb.gz && \
-  wget https://download.db-ip.com/free/dbip-country-lite-2023-03.mmdb.gz && \
+  wget https://download.db-ip.com/free/dbip-city-lite-2023-07.mmdb.gz && \
+  wget https://download.db-ip.com/free/dbip-asn-lite-2023-07.mmdb.gz && \
+  wget https://download.db-ip.com/free/dbip-country-lite-2023-07.mmdb.gz && \
   gunzip *gz && \
   cd /ntopng/packages/debian && \
   ./configure && \
