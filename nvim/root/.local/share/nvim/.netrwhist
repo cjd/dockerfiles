@@ -1,0 +1,7 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhistcnt =5
+let g:netrw_dirhist_5='/home/cjd/git/dockerfiles/nvim/root/.config/nvim/lua'
+let g:netrw_dirhist_4='/home/cjd/git/dockerfiles/nvim/root'
+let g:netrw_dirhist_3='/home/cjd/git/dockerfiles/nvim/root/.config'
+let g:netrw_dirhist_2='/home/cjd/git/dockerfiles/nvim/root/.config/nvim'
+let g:netrw_dirhist_1='/home/cjd/git/dockerfiles/nvim/root/.config/nvim/lua'
