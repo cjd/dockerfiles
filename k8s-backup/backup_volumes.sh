@@ -12,27 +12,27 @@ if [ "$1" = "-b" ]
 fi
 
 VOLROOT=/k8s
-cd ${VOLROOT}
+cd ${VOLROOT} || exit
 for VOL in */*
-  do if [ ! -z "$1" -a "$1" != "$VOL" ];then continue; fi
-  if [ -e ${VOL}/.nodeName ]
-    then NODE=`cat ${VOL}/.nodeName`
+  do if [ -n "$1" ] && [ "$1" != "$VOL" ];then continue; fi
+  if [ -e "${VOL}/.nodeName" ]
+  then NODE=$(cat "${VOL}/.nodeName")
     else echo "No node given for ${VOL}"; continue
   fi
-  echo Syncing ${VOL} from ${NODE}
+  echo Syncing "${VOL}" from "${NODE}"
   if [ "${NODE}" != "jimbob" ]
-    then mkdir -p ${VOLROOT}/${VOL}/
-    rsync -av -e "ssh ${SSH_OPTS}" --delete-after ${PROGRESS} --exclude '.nodeName' --exclude '.pause' root@${NODE}:/k8s/${VOL}/ ${VOLROOT}/${VOL}/
+    then mkdir -p "${VOLROOT}/${VOL}/"
+    ionice -c 3 rsync -av -e "ssh ${SSH_OPTS}" --delete-after ${PROGRESS} --exclude '.nodeName' --exclude '.pause' "root@${NODE}:/k8s/${VOL}/" "${VOLROOT}/${VOL}/"
   else echo "Skipping as source==dest"
   fi
-  echo -n "${NODE}" > ${VOLROOT}/${VOL}/.nodeName
+  echo -n "${NODE}" > "${VOLROOT}/${VOL}/.nodeName"
   if [ "$SKIP_SEND" = "true" ]; then continue; fi
   for DSTNODE in fanless elite piserve
     do if [ "${DSTNODE}" != "${NODE}" ]
-      then echo Sending ${VOL} to ${DSTNODE}
-        rsync -av -e "ssh ${SSH_OPTS}" --delete-after ${PROGRESS} ${VOLROOT}/${VOL}/ root@${DSTNODE}:/k8s/${VOL}/
+      then echo "Sending ${VOL} to ${DSTNODE}"
+        ionice -c 3 rsync -av -e "ssh ${SSH_OPTS}" --delete-after ${PROGRESS} "${VOLROOT}/${VOL}/" "root@${DSTNODE}:/k8s/${VOL}/"
     fi
   done
   echo Syncing to tank
-  rsync -av -e "ssh ${SSH_OPTS}" --delete-after ${PROGRESS} ${VOLROOT}/${VOL}/ root@jimbob:/tank/Volumes/${VOL}/
+  ionice -c 3 rsync -av -e "ssh ${SSH_OPTS}" --delete-after ${PROGRESS} "${VOLROOT}/${VOL}/" "root@jimbob:/tank/Volumes/${VOL}/"
 done
