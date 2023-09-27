@@ -1,2 +1,5 @@
 nvim/root/.cache
 nvim/root/.local/state
+nvim/root/.local/share/nvim/lazy/everforest-nvim
+nvim/root/.local/share/nvim/lazy/indent-blankline.nvim
+nvim/root/.local/share/nvim/lazy/mini.animate
