@@ -22,7 +22,7 @@ for VOL in */*
   echo Syncing "${VOL}" from "${NODE}"
   if [ "${NODE}" != "jimbob" ]
     then mkdir -p "${VOLROOT}/${VOL}/"
-    ionice -c 3 rsync -av -e "ssh ${SSH_OPTS}" --delete-after ${PROGRESS} --exclude '.nodeName' --exclude '.pause' "root@${NODE}:/k8s/${VOL}/" "${VOLROOT}/${VOL}/"
+    ionice -c 3 rsync -av -e "ssh ${SSH_OPTS}" --delete-during ${PROGRESS} --exclude '.nodeName' --exclude '.pause' "root@${NODE}:/k8s/${VOL}/" "${VOLROOT}/${VOL}/"
   else echo "Skipping as source==dest"
   fi
   echo -n "${NODE}" > "${VOLROOT}/${VOL}/.nodeName"
@@ -30,9 +30,9 @@ for VOL in */*
   for DSTNODE in fanless elite piserve
     do if [ "${DSTNODE}" != "${NODE}" ]
       then echo "Sending ${VOL} to ${DSTNODE}"
-        ionice -c 3 rsync -av -e "ssh ${SSH_OPTS}" --delete-after ${PROGRESS} "${VOLROOT}/${VOL}/" "root@${DSTNODE}:/k8s/${VOL}/"
+        ionice -c 3 rsync -av -e "ssh ${SSH_OPTS}" --delete-during ${PROGRESS} "${VOLROOT}/${VOL}/" "root@${DSTNODE}:/k8s/${VOL}/"
     fi
   done
   echo Syncing to tank
-  ionice -c 3 rsync -av -e "ssh ${SSH_OPTS}" --delete-after ${PROGRESS} "${VOLROOT}/${VOL}/" "root@jimbob:/tank/Volumes/${VOL}/"
+  ionice -c 3 rsync -av -e "ssh ${SSH_OPTS}" --delete-during ${PROGRESS} "${VOLROOT}/${VOL}/" "root@jimbob:/tank/Volumes/${VOL}/"
 done
