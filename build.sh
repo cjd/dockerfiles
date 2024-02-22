@@ -1,6 +1,6 @@
 #!/bin/bash
-ARCHS=linux/arm/v7,linux/arm64/v8,linux/amd64
-#ARCHS=linux/arm64/v8,linux/amd64
+#ARCHS=linux/arm/v7,linux/arm64/v8,linux/amd64
+ARCHS=linux/arm64/v8,linux/amd64
 # shellcheck disable=2013
 docker run --privileged --dns=8.8.8.8 --rm tonistiigi/binfmt --install all
 if [ -n "$1" ]; then
