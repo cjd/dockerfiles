@@ -2,6 +2,7 @@
 
 echo "192.168.0.2  jimbob" >> /etc/hosts
 echo "192.168.0.4  elite" >> /etc/hosts
+echo "192.168.0.5  lenny" >> /etc/hosts
 echo "192.168.0.8  fanless" >> /etc/hosts
 echo "192.168.0.9  piserve" >> /etc/hosts
 

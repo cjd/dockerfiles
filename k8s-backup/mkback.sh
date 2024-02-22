@@ -6,14 +6,12 @@ YESTERDAY=$(TZ="UTC+14" date "+%Y-%m-%d")
 # Quick snapshot of k8s volumes first
 zfs snapshot "tank/Volumes@${YESTERDAY}"
 # Now for the non-volume stuff
-for HOSTNAME in tinkerboard website piserve
+for HOSTNAME in fanless website
     do echo 
     if [ "$HOSTNAME" = "website" ]
         then DIR=/home/cjd/Docker-Data
-    elif [ "$HOSTNAME" = "tinkerboard" ]
+    elif [ "$HOSTNAME" = "fanless" ]
         then DIR=/home/cjd/Docker-Data
-    elif [ "$HOSTNAME" = "piserve" ]
-        then DIR=/var/lib/rancher/k3s/server
     else echo No/Unknown host specified; exit;
     fi
     echo "##############################"

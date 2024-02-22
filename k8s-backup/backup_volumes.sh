@@ -27,7 +27,7 @@ for VOL in */*
   fi
   echo -n "${NODE}" > "${VOLROOT}/${VOL}/.nodeName"
   if [ "$SKIP_SEND" = "true" ]; then continue; fi
-  for DSTNODE in fanless elite piserve
+  for DSTNODE in elite piserve lenny
     do if [ "${DSTNODE}" != "${NODE}" ]
       then echo "Sending ${VOL} to ${DSTNODE}"
         ionice -c 3 rsync -av -e "ssh ${SSH_OPTS}" --delete-during ${PROGRESS} "${VOLROOT}/${VOL}/" "root@${DSTNODE}:/k8s/${VOL}/"
