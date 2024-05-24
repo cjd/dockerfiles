@@ -20,13 +20,22 @@ for HOSTNAME in fanless website
     cd $BACKUPDIR || exit
     zfs snapshot "tank/Backups/${HOSTNAME}@${YESTERDAY}"
     rsync --archive --delete-during --verbose --human-readable --partial --stats --inplace -e "ssh ${SSH_OPTS}" $EXCLUDE root@$HOSTNAME:$DIR $BACKUPDIR/${HOSTNAME}
-    
-    for DATE in $(zfs list -t all |grep $HOSTNAME|grep "@20"|sed -e 's/^.*@\([0-9-]*\) .*$/\1/g'|sort -u|head -n -7)
-        do KEEP=$(date -d "$DATE" +%u)
-        if [ "$KEEP" -ne 1 ]
-            then for ZFS in $(zfs list -t all|grep "$DATE" | cut -f1 -d' ')
-            do zfs destroy -v "$ZFS"
-            done
-        fi
-    done
+done
+
+# Clean up to only have last week of daily snapshots, then once per week, then once per month
+for DATE in $(zfs list -t all |grep "@20"|sed -e 's/^.*@\([0-9-]*\) .*$/\1/g'|sort -u|head -n -7)
+    do KEEP=$(date -d "$DATE" +%u)
+    if [ "$KEEP" -ne 1 ]
+        then for ZFS in $(zfs list -t all|grep "$DATE" | cut -f1 -d' ')
+        do zfs destroy -v "$ZFS"
+        done
+    fi
+done
+for DATE in $(zfs list -t all |grep "@20"|sed -e 's/^.*@\([0-9-]*\) .*$/\1/g'|sort -u|head -n -14)
+    do KEEP=$(echo "$DATE" | cut -f3 -d'-')
+    if [ "$KEEP" -gt 7 ]
+        then for ZFS in $(zfs list -t all|grep "$DATE" | cut -f1 -d' ')
+        do zfs destroy -v "$ZFS"
+        done
+    fi
 done
