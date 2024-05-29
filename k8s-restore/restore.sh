@@ -7,11 +7,16 @@ echo "192.168.0.8  fanless" >> /etc/hosts
 echo "192.168.0.9  piserve" >> /etc/hosts
 
 SSH_OPTS='-q -p 12000 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'
+# Fix for permissions when pod not running as root (https://github.com/kubernetes/kubernetes/issues/57923)
+cp /root/.ssh/id_rsa /root
+chmod 0400 /root/id_rsa
+SSH_OPTS="${SSH_OPTS} -i /root/id_rsa"
+
 echo "Checking for the existing data"
 FORCE=0
-cd /mnt
+cd /mnt || exit
 for PV in *
-  do echo Checking /k8s/${NS}/${PV}
+  do echo "Checking /k8s/${NS}/${PV}"
   if ssh $SSH_OPTS root@jimbob test -f /k8s/${NS}/${PV}/.pause
     then echo Pausing; sleep 1d
   fi
