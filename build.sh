@@ -17,6 +17,9 @@ else
 	for IMAGE in *; do
 		if [ -d "$IMAGE" ]; then
 			pushd "$IMAGE" || exit
+      if [ -e .skip ]; then
+        continue
+      fi
       if [ -e .build-archs ]; then
         ARCHS=$(cat .build-archs)
       fi
