@@ -1,10 +1,12 @@
 #!/bin/sh
-
-echo "192.168.0.2  jimbob" >> /etc/hosts
-echo "192.168.0.4  elite" >> /etc/hosts
-echo "192.168.0.5  lenny" >> /etc/hosts
-echo "192.168.0.8  fanless" >> /etc/hosts
-echo "192.168.0.9  piserve" >> /etc/hosts
+# shellcheck disable=SC2086
+{
+echo "192.168.0.2  jimbob"
+echo "192.168.0.4  elite"
+echo "192.168.0.5  lenny"
+echo "192.168.0.8  fanless"
+echo "192.168.0.9  piserve"
+} >> /etc/hosts
 
 SSH_OPTS='-q -p 12000 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'
 # Fix for permissions when pod not running as root (https://github.com/kubernetes/kubernetes/issues/57923)
@@ -21,10 +23,10 @@ for PV in *
     then echo Pausing; sleep 1d
   fi
   # Check for node pv was last on
-  LASTNODE=`ssh $SSH_OPTS root@jimbob cat /k8s/${NS}/${PV}/.nodeName`
+  LASTNODE=$(ssh $SSH_OPTS root@jimbob cat /k8s/${NS}/${PV}/.nodeName)
   if [ -n "$LASTNODE" ]
     then echo Last running on ${LASTNODE} - Now running on ${NODE}
-    if [ ! -z "$LASTNODE" -a "$LASTNODE" != "$NODE" ]
+    if [ -n "$LASTNODE" ] && [ "$LASTNODE" != "$NODE" ]
       then echo Syncing ${PV} from ${LASTNODE}
       if ping -c 1 ${LASTNODE}
           then rsync -av -e "ssh $SSH_OPTS" --delete-during root@${LASTNODE}:/k8s/${NS}/${PV}/ /mnt/${PV}/
@@ -41,6 +43,7 @@ for PV in *
     rsync -av  -e "ssh $SSH_OPTS" --delete-during root@jimbob:/k8s/${NS}/${PV}/ /mnt/${PV}/
     FORCE=0
   fi
+  # shellcheck disable=SC2029
   ssh $SSH_OPTS root@jimbob "echo -e $NODE > /k8s/${NS}/${PV}/.nodeName"
 done
 echo "  >> Data loaded"
