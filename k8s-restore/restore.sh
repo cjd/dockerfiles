@@ -8,11 +8,11 @@ echo "192.168.0.8  fanless"
 echo "192.168.0.9  piserve"
 } >> /etc/hosts
 
-SSH_OPTS='-q -p 12000 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'
 # Fix for permissions when pod not running as root (https://github.com/kubernetes/kubernetes/issues/57923)
 cp /root/.ssh/id_rsa /root
 chmod 0400 /root/id_rsa
-SSH_OPTS="${SSH_OPTS} -i /root/id_rsa"
+
+SSH_OPTS='-q -p 12000 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i /root/id_rsa'
 
 echo "Checking for the existing data"
 FORCE=0
@@ -36,7 +36,7 @@ for PV in *
   else echo No previous nodeName found
   fi
   if ssh $SSH_OPTS root@jimbob test -f /k8s/${NS}/${PV}/.force_restore
-  then FORCE=1
+    then FORCE=1
   fi
   if [ $FORCE -eq 1 ]
     then echo Restoring ${PV} from backup
@@ -44,6 +44,6 @@ for PV in *
     FORCE=0
   fi
   # shellcheck disable=SC2029
-  ssh $SSH_OPTS root@jimbob "echo -e $NODE > /k8s/${NS}/${PV}/.nodeName"
+  ssh $SSH_OPTS root@jimbob "echo -e ${NODE} > /k8s/${NS}/${PV}/.nodeName"
 done
 echo "  >> Data loaded"
