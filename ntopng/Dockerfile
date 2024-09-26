@@ -23,9 +23,9 @@ RUN cd / && \
   make
 RUN mkdir -p /root/dat_files && \
   cd /root/dat_files && \
-  wget https://download.db-ip.com/free/dbip-city-lite-2023-10.mmdb.gz && \
-  wget https://download.db-ip.com/free/dbip-asn-lite-2023-10.mmdb.gz && \
-  wget https://download.db-ip.com/free/dbip-country-lite-2023-10.mmdb.gz && \
+  wget https://download.db-ip.com/free/dbip-city-lite-2024-09.mmdb.gz && \
+  wget https://download.db-ip.com/free/dbip-asn-lite-2024-09.mmdb.gz && \
+  wget https://download.db-ip.com/free/dbip-country-lite-2024-09.mmdb.gz && \
   gunzip *gz && \
   cd /ntopng/packages/debian && \
   ./configure && \
@@ -36,7 +36,7 @@ RUN mkdir /pkgs && \
 FROM debian:bookworm
 COPY --from=builder /pkgs /
 RUN apt-get update && \
-  dpkg -i /*.deb; \
+  apt install /*.deb; \
   apt-get -y -f install && \
   apt-get clean && \
   rm /*.deb
