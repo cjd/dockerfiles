@@ -16,6 +16,22 @@ SSH_OPTS='-q -p 12000 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/nul
 
 echo "Checking for the existing data"
 FORCE=0
+if [ -z "${NS}" ];
+then echo "NS not set"
+  cd /k8s || exit
+  for PV in */*
+  do if [ -d "$PV" ]; then
+      echo Checking ${PV}
+      if [ ! -e "${PV}/.nodeName" ]; then
+        # Check for node pv was last on
+        echo Restoring ${PV} from tank
+        rsync -av -e "ssh $SSH_OPTS" --delete-during root@jimbob:/tank/Volumes/${PV}/ /k8s/${PV}/
+      fi
+    fi
+  done
+  exit
+fi
+
 cd /mnt || exit
 for PV in *
   do echo "Checking /k8s/${NS}/${PV}"
