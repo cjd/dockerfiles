@@ -1,5 +1,5 @@
 FROM alpine:latest
-LABEL org.opencontainers.image.source https://github.com/cjd/dockerfiles
+LABEL org.opencontainers.image.source=https://github.com/cjd/dockerfiles
 RUN apk --no-cache add neovim ripgrep fd git
 COPY root/.config /root/.config
 RUN nvim --headless "+Lazy! sync" +qa && rm -rf root/.local/share/nvim/*/.git
