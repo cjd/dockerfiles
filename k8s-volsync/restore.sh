@@ -14,6 +14,8 @@ for PV in */*; do
     if [ ! "$(ls -A "${PV}" | grep -v lost+found)" ]; then
       echo "Restoring ${PV} from tank"
       rsync -av -e "ssh $SSH_OPTS" --delete-during "root@nas.default:/tank/Volumes/${PV}/" "/k8s/${PV}/"
+    else
+      echo "${PV} data already exists. Skipping sync"
     fi
   fi
 done
