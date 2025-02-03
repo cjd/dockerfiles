@@ -13,7 +13,7 @@ for PV in */*; do
     # Check if directory empty
     if [ ! "$(ls -A "${PV}" | grep -v lost+found)" ]; then
       echo "Restoring ${PV} from tank"
-      rsync -av -e "ssh $SSH_OPTS" --delete-during root@nas.default:/tank/Volumes/${PV}/ /k8s/${PV}/
+      rsync -av -e "ssh $SSH_OPTS" --delete-during "root@nas.default:/tank/Volumes/${PV}/" "/k8s/${PV}/"
     fi
   fi
 done

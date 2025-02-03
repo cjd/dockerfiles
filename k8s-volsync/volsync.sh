@@ -4,6 +4,9 @@ SSH_OPTS='-q -p 12000 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/nul
 VOLROOT=/k8s
 cd ${VOLROOT} || exit
 
+PERIOD="2h"
+if [ -n "$1" ]; then PERIOD="$1";fi
+
 function handle_sigterm() {
   echo SIGTERM received - shutting down
   for VOL in */*; do
@@ -19,9 +22,10 @@ cp /root/.ssh/id_rsa /
 chmod 0400 /id_rsa
 SSH_OPTS="${SSH_OPTS} -i /id_rsa"
 trap handle_sigterm SIGTERM
+echo "Volsync container started"
 while true; do
-  echo Waiting 2h
-  sleep 2h &
+  echo "Waiting $PERIOD"
+  sleep "$PERIOD" &
   wait $!
   for VOL in */*; do
     echo "Syncing $VOL to tank"
