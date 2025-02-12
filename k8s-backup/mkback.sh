@@ -1,6 +1,7 @@
 #!/bin/bash
 # Quick snapshot of k8s volumes first
 YESTERDAY=$(TZ="UTC+14" date "+%Y-%m-%d")
+echo "Creating snapshot tank/Volumes@${YESTERDAY}"
 zfs snapshot "tank/Volumes@${YESTERDAY}"
 
 # Clean up to only have last week of daily snapshots, then once per week, then once per month
