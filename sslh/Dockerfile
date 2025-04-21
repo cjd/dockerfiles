@@ -1,5 +1,5 @@
 FROM alpine:latest
-LABEL org.opencontainers.image.source https://github.com/cjd/dockerfiles
+LABEL org.opencontainers.image.source=https://github.com/cjd/dockerfiles
 RUN apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/testing sslh
 ENV LISTEN_IP 0.0.0.0
 ENV LISTEN_PORT 443

@@ -1,5 +1,5 @@
 FROM alpine:latest
-LABEL org.opencontainers.image.source https://github.com/cjd/dockerfiles
+LABEL org.opencontainers.image.source=https://github.com/cjd/dockerfiles
 
 ENV RUNEVERY 7200
 ENV HOME /

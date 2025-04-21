@@ -1,5 +1,5 @@
 FROM node:18-slim
-LABEL org.opencontainers.image.source https://github.com/cjd/dockerfiles
+LABEL org.opencontainers.image.source=https://github.com/cjd/dockerfiles
 RUN apt-get -y update && apt-get -y install git curl
 RUN git clone --depth=1 https://github.com/GridSpace/grid-apps.git /grid
 WORKDIR /grid

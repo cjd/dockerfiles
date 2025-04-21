@@ -1,5 +1,5 @@
 FROM nginx:alpine
-LABEL org.opencontainers.image.source https://github.com/cjd/dockerfiles
+LABEL org.opencontainers.image.source=https://github.com/cjd/dockerfiles
 RUN apk add websockify spice-html5 --repository=https://dl-cdn.alpinelinux.org/alpine/edge/testing
 RUN sed -i -e 's/100:101/1000:1000/g' /etc/passwd
 RUN touch /var/run/nginx.pid \
