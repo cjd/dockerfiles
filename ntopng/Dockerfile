@@ -1,4 +1,4 @@
-FROM debian:bookworm as builder
+FROM debian:bookworm AS builder
 LABEL org.opencontainers.image.source=https://github.com/cjd/dockerfiles
 
 RUN apt-get update && \
