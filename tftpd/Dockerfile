@@ -35,6 +35,9 @@ EXPOSE 1069/udp
 # User-provided boot items, e.g. kernels
 VOLUME /tftpboot/boot
 
+HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \
+  CMD pgrep in.tftpd || exit 1
+
 # The daemon doesn't seem to work if container is not run as root, but it still drops the root
 # privileges with the -u option.
 # Note that the main process still runs as root, but files are being served as non-root.

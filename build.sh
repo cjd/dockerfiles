@@ -3,7 +3,7 @@ ARCHS=linux/arm64/v8,linux/amd64
 TAG=$(date "+%Y.%m.%d")
 docker run --privileged --dns=8.8.8.8 --rm tonistiigi/binfmt --install all
 if [ -n "$1" ]; then
-	pushd "$1" || exit
+  pushd "$1" || exit
   if [ -e .build-archs ]; then
     ARCHS=$(cat .build-archs)
   fi

@@ -9,5 +9,7 @@ ENV OPENVPN_HOST 127.0.0.1
 ENV OPENVPN_PORT 1194
 ENV HTTPS_HOST localhost
 ENV HTTPS_PORT 443
+HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \
+  CMD pgrep sslh || exit 1
 CMD sslh -f -u root -t 5 -p $LISTEN_IP:$LISTEN_PORT --ssh $SSH_HOST:$SSH_PORT --tls $HTTPS_HOST:$HTTPS_PORT --openvpn $OPENVPN_HOST:$OPENVPN_PORT
 EXPOSE 443

@@ -7,3 +7,5 @@ RUN cd /usr/share/nginx/html \
  && wget -O - http://api.jscut.org/jscut_standalone.tar.gz | tar -xvz --strip-components=1 -f - \
  && rm index.html \
  && ln -s jscut.html index.html
+
+HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 CMD wget --spider http://localhost/ || exit 1

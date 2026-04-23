@@ -1,4 +1,4 @@
-FROM debian:bookworm as builder
+FROM debian:bookworm AS builder
 LABEL org.opencontainers.image.source=https://github.com/cjd/dockerfiles
 
 RUN apt-get update && \
@@ -23,9 +23,9 @@ RUN cd / && \
   make
 RUN mkdir -p /root/dat_files && \
   cd /root/dat_files && \
-  wget https://download.db-ip.com/free/dbip-city-lite-2024-09.mmdb.gz && \
-  wget https://download.db-ip.com/free/dbip-asn-lite-2024-09.mmdb.gz && \
-  wget https://download.db-ip.com/free/dbip-country-lite-2024-09.mmdb.gz && \
+  wget https://download.db-ip.com/free/dbip-city-lite-2025-04.mmdb.gz && \
+  wget https://download.db-ip.com/free/dbip-asn-lite-2025-04.mmdb.gz && \
+  wget https://download.db-ip.com/free/dbip-country-lite-2025-04.mmdb.gz && \
   gunzip *gz && \
   cd /ntopng/packages/debian && \
   ./configure && \

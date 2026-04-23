@@ -3,7 +3,7 @@ LABEL org.opencontainers.image.source=https://github.com/cjd/dockerfiles
 
 ENV LANG C.UTF-8
 
-RUN apk add python3 curl py3-paho-mqtt
+RUN apk add --no-cache python3 curl py3-paho-mqtt
 # Install latest pip
 #RUN python3 -m ensurepip && \
 #    pip3 install --no-cache --upgrade pip
