@@ -45,5 +45,8 @@ RUN echo '#!/bin/bash\ncd /etc/ntopng\n/usr/bin/redis-server &\n/usr/bin/ntopng 
 
 EXPOSE 3000
 
+HEALTHCHECK --interval=60s --timeout=10s --start-period=30s --retries=3 \
+  CMD pgrep ntopng || exit 1
+
 ENTRYPOINT ["/run.sh"]
 
