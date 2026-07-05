@@ -1,4 +1,5 @@
 #!/bin/sh
+set -e
 # Fix for permissions when pod not running as root (https://github.com/kubernetes/kubernetes/issues/57923)
 cp /root/.ssh/id_rsa /root
 chmod 0400 /root/id_rsa
