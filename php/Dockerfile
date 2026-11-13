@@ -14,7 +14,8 @@ RUN apk add --no-cache \
     libgmpxx \
     libgomp \
     git \
-    gettext
+    gettext \
+    ghostscript
 
 # Try to install calibre separately - it might need more repositories enabled
 RUN echo "https://dl-cdn.alpinelinux.org/alpine/v3.24/community" >> /etc/apk/repositories && \
