@@ -7,6 +7,9 @@ if [ -n "$1" ]; then
   if [ -e .build-archs ]; then
     ARCHS=$(cat .build-archs)
   fi
+  for D in $(grep FROM ./Dockerfile | cut -f2 -d" " | sort -u); do
+    docker pull "$D"
+  done
   docker buildx build --push --platform "$ARCHS" --tag "debenham/${1}:${TAG}" --tag "ghcr.io/cjd/${1}:${TAG}" --tag "debenham/${1}:latest" --tag "ghcr.io/cjd/${1}:latest" .
 else
 	# shellcheck disable=2013
