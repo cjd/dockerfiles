@@ -12,8 +12,8 @@ is_empty() {
   [ -z "$(ls -A "$1" | grep -v 'lost+found')" ]
 }
 
-function handle_sigterm() {
-  echo SIGTERM received - shutting down
+sync_volumes() {
+  local prefix=("$@")
   for VOL in */*; do
     if [ -d "$VOL" ]; then
       if is_empty "$VOL"; then
@@ -21,10 +21,14 @@ function handle_sigterm() {
         continue
       fi
       echo "Syncing $VOL to tank"
-      echo -n "tank" >"${VOLROOT}/${VOL}/.nodeName"
-      rsync -avx -e "ssh ${SSH_OPTS}" --delete-during --exclude "lost+found" "${VOLROOT}/${VOL}/" "root@nas.default:/tank/Volumes/${VOL}/"
+      "${prefix[@]}" rsync -avxX -e "ssh ${SSH_OPTS}" --delete-during --exclude "lost+found" "${VOLROOT}/${VOL}/" "root@nas.default:/tank/Volumes/${VOL}/"
     fi
   done
+}
+
+function handle_sigterm() {
+  echo SIGTERM received - shutting down
+  sync_volumes
   echo Shutdown Complete
   exit
 }
@@ -38,16 +42,6 @@ while true; do
   echo "Waiting $PERIOD"
   sleep "$PERIOD" &
   wait $!
-  for VOL in */*; do
-    if [ -d "$VOL" ]; then
-      if is_empty "$VOL"; then
-        echo "WARNING: ${VOL} is completely empty! Skipping sync to prevent backup erasure."
-        continue
-      fi
-      echo "Syncing $VOL to tank"
-      echo -n "tank" >"${VOLROOT}/${VOL}/.nodeName"
-      ionice -c 3 rsync -avx -e "ssh ${SSH_OPTS}" --delete-during --exclude "lost+found" "${VOLROOT}/${VOL}/" "root@nas.default:/tank/Volumes/${VOL}/"
-    fi
-  done
+  sync_volumes ionice -c 3
   echo Sync Complete
 done
