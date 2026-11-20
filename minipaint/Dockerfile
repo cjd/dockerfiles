@@ -1,5 +1,5 @@
 FROM node:latest
-LABEL org.opencontainers.image.source https://github.com/cjd/dockerfiles
+LABEL org.opencontainers.image.source=https://github.com/cjd/dockerfiles
 RUN apt-get update && apt-get install -y --no-install-recommends git curl && rm -rf /var/lib/apt/lists/*
 RUN git clone --depth=1 https://github.com/viliusle/miniPaint
 WORKDIR /miniPaint

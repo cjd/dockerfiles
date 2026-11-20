@@ -41,9 +41,7 @@ HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \
 # The daemon doesn't seem to work if container is not run as root, but it still drops the root
 # privileges with the -u option.
 # Note that the main process still runs as root, but files are being served as non-root.
-CMD set -eu ;\
-    # Some devices such as the Raspberry Pi 4 expect files to be available directly in the TFTP root,
-    # so use a boot directory with the special name "root" to have it's contents copied to the TFTP root directory.
-    # See README for an example file structure for RPi.
-    [ -d /tftpboot/boot/root ] && cp -af /tftpboot/boot/root/* /tftpboot ;\
-    exec in.tftpd -L -vvv -u ftp --secure --address 0.0.0.0:1069 $TFTPD_EXTRA_ARGS /tftpboot
+# Some devices such as the Raspberry Pi 4 expect files to be available directly in the TFTP root,
+# so use a boot directory with the special name "root" to have its contents copied to the TFTP root directory.
+# See README for an example file structure for RPi.
+CMD ["/bin/sh", "-c", "set -eu; [ -d /tftpboot/boot/root ] && cp -af /tftpboot/boot/root/* /tftpboot; exec in.tftpd -L -vvv -u ftp --secure --address 0.0.0.0:1069 $TFTPD_EXTRA_ARGS /tftpboot"]

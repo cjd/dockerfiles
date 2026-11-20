@@ -1,7 +1,7 @@
 FROM alpine:latest
 LABEL org.opencontainers.image.source=https://github.com/cjd/dockerfiles
 
-ENV LANG C.UTF-8
+ENV LANG=C.UTF-8
 
 RUN apk add --no-cache python3 curl py3-paho-mqtt
 # Install latest pip

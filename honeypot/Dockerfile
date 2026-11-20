@@ -7,16 +7,20 @@ RUN apk add --no-cache alpine-sdk clang git libssh-dev openssl openssh json-c-de
     && make -j "$(nproc)"
 
 # ====== APP ======
-FROM nlss/base-alpine:latest
+FROM alpine:latest
 
 COPY --from=build /git-ssh-honeypot/bin/ssh-honeypot /bin/ssh-honeypot
 
 RUN apk add --no-cache libssh-dev json-c-dev openssh libpcap \
     && adduser --shell /bin/false --disabled-password --gecos "Honeypot" --home "/home/honeypot" honeypot \
-    && mkdir -p /home/honeypot{log,rsa}
+    && mkdir -p /home/honeypot/log /home/honeypot/rsa \
+    && chown -R honeypot:honeypot /home/honeypot
 
 COPY ["./rootfs", "/"]
+RUN chmod 0755 /bin/ssh-honeypot /bin/ssh-honeypot-wrapper /etc/cont-init.d/10-generate-rsa-key
 
 VOLUME ["/home/honeypot/log", "/home/honeypot/rsa"]
 
-EXPOSE 2022/TCP
+EXPOSE 2022/tcp
+
+CMD ["/bin/sh", "-c", "mkdir -p /home/honeypot/log /home/honeypot/rsa && chown -R honeypot:honeypot /home/honeypot && /etc/cont-init.d/10-generate-rsa-key && exec /bin/ssh-honeypot-wrapper"]

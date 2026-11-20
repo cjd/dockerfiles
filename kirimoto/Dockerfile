@@ -6,4 +6,4 @@ WORKDIR /grid
 EXPOSE 8080
 RUN npm i && npm install -g @gridspace/app-server && npm cache clean --force
 RUN rm -rf /grid/bin
-CMD gs-app-server
+CMD ["gs-app-server"]
